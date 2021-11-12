@@ -81,7 +81,7 @@ async function run() {
     //  update reviews
     app.post("/reviews", async (req, res) => {
       const userReview = req.body;
-      const result = await reviewsCollection(userReview);
+      const result = await reviewsCollection.insertOne(userReview);
       res.json(result);
     });
 
