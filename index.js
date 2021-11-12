@@ -91,6 +91,20 @@ async function run() {
       const reviews = await cursor.toArray();
       res.json(reviews);
     });
+
+    //  update product
+    app.post("/products", async (req, res) => {
+      const product = req.body;
+      const result = await productsCollection.insertOne(product);
+      res.json(result);
+    });
+
+    // get all products
+    app.get("/products", async (req, res) => {
+      const cursor = productsCollection.find({});
+      const products = await cursor.toArray();
+      res.json(products);
+    });
   } finally {
     // await client.close();
   }
