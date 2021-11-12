@@ -77,6 +77,16 @@ async function run() {
        res.json({ admin: isAdmin });
      });
 
+    //  set given review on user acc
+    app.put("/users/review", async (req, res) => {
+      const userReview = req.body;
+      const filter = { email: userReview.email };
+      const updateDoc = { $set: { reviews: [userReview] } };
+      console.log(userReview);
+      const result = await usersCollection.updateOne(filter, updateDoc);
+      res.json(result);
+    });
+
   } finally {
     // await client.close();
   }
