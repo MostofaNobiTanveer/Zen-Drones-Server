@@ -22,6 +22,7 @@ async function run() {
     await client.connect();
     const database = client.db("zen_drones");
     const usersCollection = database.collection("users");
+    const reviewsCollection = database.collection("reviews");
     const ordersCollection = database.collection("orders");
     const productsCollection = database.collection("products");
 
@@ -66,27 +67,24 @@ async function run() {
     });
 
     // check if the user is Admin
-     app.get("/users/:email", async (req, res) => {
-       const email = req.params.email;
-       const query = { email: email };
-       const user = await usersCollection.findOne(query);
-       let isAdmin = false;
-       if (user?.role === "admin") {
-         isAdmin = true;
-       }
-       res.json({ admin: isAdmin });
-     });
-
-    //  set given review on user acc
-    app.put("/users/review", async (req, res) => {
-      const userReview = req.body;
-      const filter = { email: userReview.email };
-      const updateDoc = { $set: { reviews: [userReview] } };
-      console.log(userReview);
-      const result = await usersCollection.updateOne(filter, updateDoc);
-      res.json(result);
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      let isAdmin = false;
+      if (user?.role === "admin") {
+        isAdmin = true;
+      }
+      res.json({ admin: isAdmin });
     });
 
+    //  update reviews
+    app.post("/users/reviews", async (req, res) => {
+      const userReview = req.body;
+      const result = await usersCollection.reviewsCollection(userReview);
+      res.json(result);
+    });
+    
   } finally {
     // await client.close();
   }
