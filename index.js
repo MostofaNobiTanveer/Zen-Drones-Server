@@ -109,8 +109,7 @@ async function run() {
 
     // get single product
     app.get("/products/:id", async (req, res) => {
-      const id = req.params.name;
-      console.log("getting specific service", id);
+      const id = req.params.id;
       const query = { _id: ObjectId(id) };
       const product = await productsCollection.findOne(query);
       res.json(product);
