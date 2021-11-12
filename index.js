@@ -81,17 +81,16 @@ async function run() {
     //  update reviews
     app.post("/reviews", async (req, res) => {
       const userReview = req.body;
-      const result = await usersCollection.reviewsCollection(userReview);
+      const result = await reviewsCollection(userReview);
       res.json(result);
     });
 
     // get all reviews
     app.get("/reviews", async (req, res) => {
-      const cursor = usersCollection.find({});
+      const cursor = reviewsCollection.find({});
       const reviews = await cursor.toArray();
       res.json(reviews);
     });
-
   } finally {
     // await client.close();
   }
