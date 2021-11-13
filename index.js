@@ -132,7 +132,7 @@ async function run() {
     // **************************
     // *ORDERS*
 
-    // Add Parcels API
+    // Add Order API
     app.post("/placeOrder", async (req, res) => {
       const order = req.body;
       const result = await ordersCollection.insertOne(order);
@@ -146,7 +146,7 @@ async function run() {
       res.send(orders);
     });
 
-    // GET my Prcels
+    // GET my Orders
     app.get("/orders/:email", async (req, res) => {
       const result = await ordersCollection
         .find({
