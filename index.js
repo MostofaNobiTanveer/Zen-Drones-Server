@@ -183,10 +183,7 @@ async function run() {
       });
       res.send(result);
     });
-    
-  } finally {
-    // await client.close();
-  }
+
   } finally {
     // await client.close();
   }
