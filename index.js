@@ -79,6 +79,9 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
+    // **************************
+    // *REVIEW*
+
     //  update reviews
     app.post("/reviews", async (req, res) => {
       const userReview = req.body;
@@ -92,6 +95,9 @@ async function run() {
       const reviews = await cursor.toArray();
       res.json(reviews);
     });
+
+    // **************************
+    // *PRODUCTS*
 
     //  post product
     app.post("/products", async (req, res) => {
@@ -122,7 +128,65 @@ async function run() {
       });
       res.send(result);
     });
+
+    // **************************
+    // *ORDERS*
+
+    // Add Parcels API
+    app.post("/placeOrder", async (req, res) => {
+      const order = req.body;
+      const result = await ordersCollection.insertOne(order);
+      res.json(result);
+    });
+
+    //GET orders
+    app.get("/orders", async (req, res) => {
+      const cursor = ordersCollection.find({});
+      const orders = await cursor.toArray();
+      res.send(orders);
+    });
+
+    // GET my Prcels
+    app.get("/orders/:email", async (req, res) => {
+      const result = await ordersCollection
+        .find({
+          email: req.params.email,
+        })
+        .toArray();
+      res.send(result);
+    });
+
+    // Update an order status
+    app.put("/updateOrder/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedOrder = req.body;
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: updatedOrder.status,
+        },
+      };
+      const result = await ordersCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      res.send(result);
+    });
+
+    // DELETE an Order
+    app.delete("/deleteOrder/:id", async (req, res) => {
+      // console.log(req.params.id);
+      const result = await ordersCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
     
+  } finally {
+    // await client.close();
+  }
   } finally {
     // await client.close();
   }
