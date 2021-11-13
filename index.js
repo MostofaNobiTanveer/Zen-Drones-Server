@@ -93,7 +93,7 @@ async function run() {
       res.json(reviews);
     });
 
-    //  update product
+    //  post product
     app.post("/products", async (req, res) => {
       const product = req.body;
       const result = await productsCollection.insertOne(product);
@@ -115,6 +115,14 @@ async function run() {
       res.json(product);
     });
 
+    // DELETE a Product
+    app.delete("/deleteProduct/:id", async (req, res) => {
+      const result = await productsCollection.deleteOne({
+        _id: ObjectId(req.params.id),
+      });
+      res.send(result);
+    });
+    
   } finally {
     // await client.close();
   }
